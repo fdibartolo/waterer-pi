@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 def schedule():
   if waterer.is_button_pressed():
-    print('pressed!')
+    waterer.water()
 
 @app.route('/')
 def hello_world():
