@@ -7,7 +7,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
 def schedule():
-  if waterer.button_pressed?:
+  if waterer.is_button_pressed():
     print('pressed!')
 
 @app.route('/')

@@ -24,5 +24,5 @@ def shutdown():
   GPIO.cleanup()
   print("WATERER::goodbye!")
 
-def button_pressed?():
+def is_button_pressed():
   not GPIO.input(3)
