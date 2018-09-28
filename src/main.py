@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello_world():
 
   p = environ.get('PASS')
-  print p
+  print(p)
   return 'Welcome to Waterer!' + p
 
 if __name__ == '__main__':
