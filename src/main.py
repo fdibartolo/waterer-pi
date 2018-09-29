@@ -37,6 +37,7 @@ atexit.register(lambda: scheduler.shutdown())
 atexit.register(lambda: waterer.shutdown())
 
 if __name__ == '__main__':
+  is_web_triggered = False
   waterer.setup()
   waterer.init()
   scheduler = BackgroundScheduler()
