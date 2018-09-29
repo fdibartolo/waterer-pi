@@ -32,6 +32,7 @@ def health_check():
 
 @app.route('/water')
 def water():
+  global is_web_triggered
   is_web_triggered = True
   print('web button')
   print(is_web_triggered)
