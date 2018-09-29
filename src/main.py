@@ -10,6 +10,8 @@ is_web_triggered = False
 
 def schedule():
   global is_web_triggered
+  print('schedule')
+  print(is_web_triggered)
   if waterer.is_button_pressed():
     waterer.water('BUTTON')
   elif is_web_triggered:
@@ -31,6 +33,8 @@ def health_check():
 @app.route('/water')
 def water():
   is_web_triggered = True
+  print('web button')
+  print(is_web_triggered)
   return redirect('/', code=302)
 
 # Shut down the scheduler & gpio when exiting the app
