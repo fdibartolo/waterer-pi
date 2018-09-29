@@ -9,6 +9,7 @@ app = Flask(__name__)
 is_web_triggered = False
 
 def schedule():
+  global is_web_triggered
   if waterer.is_button_pressed():
     waterer.water('BUTTON')
   elif is_web_triggered:
