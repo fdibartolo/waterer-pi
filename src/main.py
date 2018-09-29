@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, redirect
 from os import environ
 import time
 import atexit
@@ -8,18 +8,24 @@ app = Flask(__name__)
 
 def schedule():
   if waterer.is_button_pressed():
-    waterer.water()
+    waterer.water('BUTTON')
 
 @app.route('/')
-def hello_world():
+def home():
   p = environ.get('PASS')
   print(p)
-  return 'Welcome to Waterer!' + p
+  templateData = { 'status' : 'Online' }
+  return render_template('home.html', **templateData)
 
 @app.route('/healthcheck')
 def health_check():
   waterer.toggle_led()
   return jsonify({'health': 'good!'})
+
+@app.route('/water')
+def water():
+  waterer.water('WEB')
+  return redirect('/', code=302)
 
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())

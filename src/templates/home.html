@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+   <title>RPi Web Server</title>
+   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <hr>
+    <h2>
+      Waterer
+      {% if status == 'Online' %}
+        <span class="badge badge-pill badge-success float-right" style="padding:5px 30px;font-weight:normal">{{ status }}</span>
+      {% else %}
+        <span class="badge badge-pill badge-danger float-right" style="padding:5px 30px;font-weight:normal">{{ status }}</span>
+      {% endif %}
+    </h2>
+    <hr>
+    <div class="text-center">
+      <a href="/water" class="btn btn-primary btn-lg">
+        Water Now &nbsp;&nbsp;<i class="fa fa-tint fa-lg"></i>&nbsp;<i class="fa fa-tint fa-2x"></i>&nbsp;<i class="fa fa-tint fa-lg"></i>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
+
+

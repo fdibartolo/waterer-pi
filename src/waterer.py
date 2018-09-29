@@ -31,7 +31,8 @@ def shutdown():
 def is_button_pressed():
   return (GPIO.input(3) == 0)
 
-def water():
+def water(source):
+  print("WATERER::triggered via " + source)
   print("WATERER::start watering area 1...")
   now = datetime.datetime.now()
   GPIO.output(7, GPIO.LOW)
