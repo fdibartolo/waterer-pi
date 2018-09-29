@@ -6,9 +6,14 @@ import waterer
 from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
+is_web_triggered = False
+
 def schedule():
   if waterer.is_button_pressed():
     waterer.water('BUTTON')
+  elif is_web_triggered:
+    is_web_triggered = False
+    waterer.water('WEB')
 
 @app.route('/')
 def home():
@@ -24,7 +29,7 @@ def health_check():
 
 @app.route('/water')
 def water():
-  waterer.water('WEB')
+  is_web_triggered = True
   return redirect('/', code=302)
 
 # Shut down the scheduler & gpio when exiting the app
