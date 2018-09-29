@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from os import environ
 import time
 import atexit
@@ -12,10 +12,14 @@ def schedule():
 
 @app.route('/')
 def hello_world():
-  waterer.toggle_led()
   p = environ.get('PASS')
   print(p)
   return 'Welcome to Waterer!' + p
+
+@app.route('/healthcheck')
+def health_check():
+  waterer.toggle_led()
+  return jsonify({'health': 'good!'})
 
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())
