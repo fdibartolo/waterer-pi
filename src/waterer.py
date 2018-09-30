@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import datetime
+import file_manager
 
 def setup():
   GPIO.setmode(GPIO.BOARD)
@@ -32,6 +33,7 @@ def is_button_pressed():
   return (GPIO.input(3) == 0)
 
 def water(source):
+  file_manager.write(source)
   print("WATERER::triggered via " + source)
   print("WATERER::start watering area 1...")
   now = datetime.datetime.now()

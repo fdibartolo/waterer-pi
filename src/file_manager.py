@@ -6,8 +6,10 @@ def write(source):
   timestamp = datetime.datetime.now()
   f = open(file_path, 'w')
   f.write('Triggered via ' + source + ' on ' + timestamp.strftime('%b %d') + ' at ' + timestamp.strftime('%H:%M') + ' hs')
-  f.close
+  f.close()
 
 def read():
   f = open(file_path, 'r')
-  return f.readline()
+  content = f.readline()
+  f.close()
+  return content
