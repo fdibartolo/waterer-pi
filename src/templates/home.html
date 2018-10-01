@@ -26,9 +26,9 @@
     </div>
     <hr>
     <h4>Last 3 runs</h4>
-    <ul>
-      {% for line in lines %}
-      <li>line</li>
+    <ul class="list-group">
+      {% for line in log %}
+      <li class="list-group-item list-group-item-light">{{ line }}</li>
       {% endfor %}
     </ul>
   </div>
