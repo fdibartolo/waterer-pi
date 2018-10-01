@@ -3,6 +3,7 @@ from os import environ
 import time
 import atexit
 import waterer
+import file_manager
 from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
@@ -20,7 +21,8 @@ def schedule():
 def home():
   p = environ.get('PASS')
   print(p)
-  templateData = { 'status' : 'Online' }
+  lines = file_manager.read()
+  templateData = { 'status' : 'Online', 'log' : lines }
   return render_template('home.html', **templateData)
 
 @app.route('/healthcheck')
