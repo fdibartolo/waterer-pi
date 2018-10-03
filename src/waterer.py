@@ -38,14 +38,14 @@ def water(source):
   print("WATERER::start watering area 1...")
   now = datetime.datetime.now()
   GPIO.output(7, GPIO.LOW)
-  while (datetime.datetime.now() - now).seconds < 5:
+  while (datetime.datetime.now() - now).seconds < 120:
     toggle_led()
   GPIO.output(7, GPIO.HIGH)
 
   print("WATERER::stop area 1 and start watering area 2...")
   now = datetime.datetime.now()
   GPIO.output(13, GPIO.LOW)
-  while (datetime.datetime.now() - now).seconds < 10:
+  while (datetime.datetime.now() - now).seconds < 300:
     toggle_led()
   GPIO.output(13, GPIO.HIGH)
 
