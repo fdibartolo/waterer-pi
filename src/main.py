@@ -17,6 +17,9 @@ def schedule():
     is_web_triggered = False
     waterer.water('WEB')
 
+def auto_water():
+  waterer.water('AUTO')
+
 @app.route('/')
 def home():
   p = environ.get('PASS')
@@ -43,7 +46,8 @@ atexit.register(lambda: waterer.shutdown())
 if __name__ == '__main__':
   waterer.setup()
   waterer.init()
-  scheduler = BackgroundScheduler()
+  scheduler = BackgroundScheduler(timezone=art)
   scheduler.add_job(schedule, 'interval', seconds=1)
+  scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=18, minute=30)
   scheduler.start()
   app.run(host='0.0.0.0', port=80)
