@@ -48,6 +48,12 @@ if __name__ == '__main__':
   waterer.init()
   scheduler = BackgroundScheduler()
   scheduler.add_job(schedule, 'interval', seconds=1)
-  scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=21, minute=30)
+
+  if environ.get('AUTO_ENABLED') == True:
+    hh = int(environ.get('HOUR'))
+    mm = int(environ.get('MINUTE'))
+    print('setting scheduler for automatic watering to ' + hh + ':' + mm + ' hs (UTC)')
+    scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=hh, minute=mm)
+
   scheduler.start()
   app.run(host='0.0.0.0', port=80)
