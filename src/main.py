@@ -22,10 +22,12 @@ def auto_water():
 
 @app.route('/')
 def home():
-  p = environ.get('PASS')
-  print(p)
   lines = file_manager.read()
   templateData = { 'status' : 'Online', 'log' : lines }
+  if environ.get('AUTO_ENABLED') == 'True':
+    templateData.update({'auto' : True, 'time' : environ.get('HOUR') + ':' + environ.get('MINUTE')})
+  else:
+    templateData.update({'auto' : False})
   return render_template('home.html', **templateData)
 
 @app.route('/healthcheck')
@@ -49,11 +51,11 @@ if __name__ == '__main__':
   scheduler = BackgroundScheduler()
   scheduler.add_job(schedule, 'interval', seconds=1)
 
-  if environ.get('AUTO_ENABLED') == True:
-    hh = int(environ.get('HOUR'))
-    mm = int(environ.get('MINUTE'))
-    print('setting scheduler for automatic watering to ' + hh + ':' + mm + ' hs (UTC)')
-    scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=hh, minute=mm)
+  if environ.get('AUTO_ENABLED') == 'True':
+    hh = environ.get('HOUR')
+    mm = environ.get('MINUTE')
+    print('setting scheduler for automatic watering to ' + hh + ':' + mm + 'hs (UTC)')
+    scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=int(hh), minute=int(mm))
 
   scheduler.start()
   app.run(host='0.0.0.0', port=80)

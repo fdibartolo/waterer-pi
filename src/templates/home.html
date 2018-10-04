@@ -23,6 +23,12 @@
       <a href="/water" class="btn btn-primary btn-lg">
         Water Now &nbsp;&nbsp;<i class="fa fa-tint fa-lg"></i>&nbsp;<i class="fa fa-tint fa-2x"></i>&nbsp;<i class="fa fa-tint fa-lg"></i>
       </a>
+      <hr>
+      {% if auto == True %}
+        <span class="font-weight-light">Automatic watering is set to run everyday at {{ time }}hs (UTC)</span>
+      {% else %}
+        <span class="font-weight-light">Automatic watering is <strong>currently disabled</strong></span>
+      {% endif %}
     </div>
     <hr>
     <h4>Last 3 runs</h4>
