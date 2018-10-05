@@ -29,12 +29,13 @@
       {% else %}
         <span class="font-weight-light">Automatic watering is <strong>currently disabled</strong></span>
       {% endif %}
+      <br><a href="/toggle_auto" class="btn btn-outline-secondary btn-sm mt-2">{{ button_text }}</a>
     </div>
     <hr>
-    <h5>Last 3 runs</h5>
-    <ul class="list-group">
+    <h5>Last 3 runs <span class="float-right"><small>{{ server_datetime }}</small></span></h5>
+    <ul class="small list-group">
       {% for line in log %}
-      <li class="list-group-item list-group-item-light small">{{ line }}</li>
+      <li class="list-group-item list-group-item-light">{{ line }}</li>
       {% endfor %}
     </ul>
   </div>

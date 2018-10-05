@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, redirect
 from os import environ
+import datetime
 import time
 import atexit
 import waterer
@@ -23,11 +24,13 @@ def auto_water():
 @app.route('/')
 def home():
   lines = file_manager.read()
-  templateData = { 'status' : 'Online', 'log' : lines }
+  now = datetime.datetime.now()
+  templateData = { 'status' : 'Online', 'log' : lines, 'server_datetime' : now.strftime('%b %d, %H:%Mhs') }
   if environ.get('AUTO_ENABLED') == 'True':
-    templateData.update({'auto' : True, 'time' : environ.get('HOUR') + ':' + environ.get('MINUTE')})
+    templateData.update({'auto' : True, 'time' : environ.get('HOUR') + ':' + environ.get('MINUTE'), 'button_text' : 'Turn Off'})
   else:
-    templateData.update({'auto' : False})
+    templateData.update({'auto' : False, 'button_text' : 'Turn On'})
+
   return render_template('home.html', **templateData)
 
 @app.route('/healthcheck')
@@ -39,6 +42,14 @@ def health_check():
 def water():
   global is_web_triggered
   is_web_triggered = True
+  return redirect('/', code=302)
+
+@app.route('/toggle_auto')
+def toggle_auto():
+  if environ.get('AUTO_ENABLED') == 'True':
+    environ['AUTO_ENABLED'] = 'False'
+  else:
+    environ['AUTO_ENABLED'] = 'True'
   return redirect('/', code=302)
 
 # Shut down the scheduler & gpio when exiting the app
