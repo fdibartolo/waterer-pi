@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import datetime
 import file_manager
+from os import environ
 
 def setup():
   GPIO.setmode(GPIO.BOARD)
@@ -36,16 +37,18 @@ def water(source):
   file_manager.write(source)
   print("WATERER::triggered via " + source)
   print("WATERER::start watering area 1...")
+  time_area_1 = int(environ.get('TIME_AREA_1'))
   now = datetime.datetime.now()
   GPIO.output(7, GPIO.LOW)
-  while (datetime.datetime.now() - now).seconds < 120:
+  while (datetime.datetime.now() - now).seconds < time_area_1:
     toggle_led()
   GPIO.output(7, GPIO.HIGH)
 
   print("WATERER::stop area 1 and start watering area 2...")
+  time_area_2 = int(environ.get('TIME_AREA_2'))
   now = datetime.datetime.now()
   GPIO.output(13, GPIO.LOW)
-  while (datetime.datetime.now() - now).seconds < 300:
+  while (datetime.datetime.now() - now).seconds < time_area_2:
     toggle_led()
   GPIO.output(13, GPIO.HIGH)
 
