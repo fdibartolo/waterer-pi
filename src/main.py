@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, redirect
+from flask import Flask, jsonify, render_template, redirect, request
 from os import environ
 import datetime
 import time
@@ -31,6 +31,8 @@ def home():
   else:
     templateData.update({'auto' : False, 'button_text' : 'Turn On'})
 
+  templateData.update({'time_area_1' : environ.get('TIME_AREA_1'), 'time_area_2' : environ.get('TIME_AREA_2')})
+
   return render_template('home.html', **templateData)
 
 @app.route('/healthcheck')
@@ -51,6 +53,22 @@ def toggle_auto():
   else:
     environ['AUTO_ENABLED'] = 'True'
   return redirect('/', code=302)
+
+@app.route('/set_area_1_time', methods=['POST'])
+def set_area_1_time():
+  set_area_time(1)
+  return redirect('/', code=302)
+
+@app.route('/set_area_2_time', methods=['POST'])
+def set_area_2_time():
+  set_area_time(2)
+  return redirect('/', code=302)
+
+def set_area_time(area_nbr):
+  var = 'TIME_AREA_1' if area_nbr == 1 else 'TIME_AREA_2'
+  val = request.form['timeArea1'] if area_nbr == 1 else request.form['timeArea2']
+  print('setting area ' + str(area_nbr) + ' watering time to ' + str(val) + ' seconds')
+  environ[var] = val
 
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())

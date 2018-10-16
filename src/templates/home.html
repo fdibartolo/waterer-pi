@@ -38,6 +38,18 @@
       <li class="list-group-item list-group-item-light">{{ line }}</li>
       {% endfor %}
     </ul>
+    <hr>
+    <h5>Timing settings</h5>
+    <form class="form-inline" action="{{ url_for('set_area_1_time') }}" method="post">
+      <span class="font-weight-light">Area 1 (sec)</span> &nbsp;
+      <input type="text" name="timeArea1" value={{ time_area_1 }}> &nbsp;
+      <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>
+    </form>
+    <form class="form-inline" action="{{ url_for('set_area_2_time') }}" method="post">
+      <span class="font-weight-light">Area 2 (sec)</span> &nbsp;
+      <input type="text" name="timeArea2" value={{ time_area_2 }}> &nbsp;
+      <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>
+    </form>
   </div>
 </body>
 </html>
