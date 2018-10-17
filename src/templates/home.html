@@ -40,15 +40,15 @@
     </ul>
     <hr>
     <h5>Timing settings</h5>
-    <form class="form-inline" action="{{ url_for('set_area_1_time') }}" method="post">
-      <span class="font-weight-light">Area 1 (sec)</span> &nbsp;
-      <input type="text" name="timeArea1" value={{ time_area_1 }}> &nbsp;
-      <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>
+    <form class="form-inline mb-3" action="{{ url_for('set_area_1_time') }}" method="post">
+      <span class="font-weight-light col-5 text-right">Area 1 (sec)</span> &nbsp;
+      <input type="text" class="col-3" name="timeArea1" value={{ time_area_1 }}> &nbsp;
+      <button type="submit" class="btn btn-outline-primary btn-sm col-3">Save</button>
     </form>
     <form class="form-inline" action="{{ url_for('set_area_2_time') }}" method="post">
-      <span class="font-weight-light">Area 2 (sec)</span> &nbsp;
-      <input type="text" name="timeArea2" value={{ time_area_2 }}> &nbsp;
-      <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>
+      <span class="font-weight-light col-5 text-right">Area 2 (sec)</span> &nbsp;
+      <input type="text" class="col-3" name="timeArea2" value={{ time_area_2 }}> &nbsp;
+      <button type="submit" class="btn btn-outline-primary btn-sm col-3">Save</button>
     </form>
   </div>
 </body>
