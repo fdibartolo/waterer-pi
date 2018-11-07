@@ -2,3 +2,4 @@ _Dockerfile
 *.pyc
 standalone_waterer.py
 last_run.txt
+aux.txt
