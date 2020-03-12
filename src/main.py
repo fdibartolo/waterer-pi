@@ -31,6 +31,7 @@ def home():
   else:
     templateData.update({'auto' : False, 'button_text' : 'Turn On'})
 
+  templateData.update({'is_watering' : environ.get('IS_WATERING') == 'True' })
   templateData.update({'time_area_1' : environ.get('TIME_AREA_1'), 'time_area_2' : environ.get('TIME_AREA_2')})
 
   return render_template('home.html', **templateData)
@@ -44,6 +45,12 @@ def health_check():
 def water():
   global is_web_triggered
   is_web_triggered = True
+  return redirect('/', code=302)
+
+@app.route('/stop')
+def stop_watering():
+  environ['IS_WATERING'] = 'False'
+  print("Stop IS_WATERING = False")
   return redirect('/', code=302)
 
 @app.route('/toggle_auto')
@@ -79,6 +86,9 @@ if __name__ == '__main__':
   waterer.init()
   scheduler = BackgroundScheduler()
   scheduler.add_job(schedule, 'interval', seconds=1)
+
+  environ['IS_WATERING'] = 'False'
+  print("Init IS_WATERING = False")
 
   if environ.get('AUTO_ENABLED') == 'True':
     hh = environ.get('HOUR')

@@ -34,6 +34,8 @@ def is_button_pressed():
   return (GPIO.input(3) == 0)
 
 def water(source):
+  environ['IS_WATERING'] = 'True'
+  print("Water IS_WATERING = True")
   file_manager.write(source)
   print("WATERER::triggered via " + source)
   print("WATERER::start watering area 1...")
@@ -52,5 +54,7 @@ def water(source):
     toggle_led()
   GPIO.output(13, GPIO.HIGH)
 
+  environ['IS_WATERING'] = 'False'
+  print("Water IS_WATERING = False")
   print("WATERER::stop watering!")
 
