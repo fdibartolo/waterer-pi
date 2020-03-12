@@ -34,6 +34,9 @@ def shutdown():
 def is_button_pressed():
   return (GPIO.input(3) == 0)
 
+def isnt_stop_requested():
+  return (environ.get('IS_WATERING') == 'True')
+
 def water(source):
   apscheduler.schedulers.base.BaseScheduler.pause_job()
   environ['IS_WATERING'] = 'True'
@@ -44,7 +47,7 @@ def water(source):
   time_area_1 = int(environ.get('TIME_AREA_1'))
   now = datetime.datetime.now()
   GPIO.output(7, GPIO.LOW)
-  while (datetime.datetime.now() - now).seconds < time_area_1:
+  while isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_1):
     toggle_led()
   GPIO.output(7, GPIO.HIGH)
 
@@ -52,7 +55,7 @@ def water(source):
   time_area_2 = int(environ.get('TIME_AREA_2'))
   now = datetime.datetime.now()
   GPIO.output(13, GPIO.LOW)
-  while (datetime.datetime.now() - now).seconds < time_area_2:
+  while isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_2):
     toggle_led()
   GPIO.output(13, GPIO.HIGH)
 
