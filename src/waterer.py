@@ -3,7 +3,7 @@ import time
 import datetime
 import file_manager
 from os import environ
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 
 def setup():
   GPIO.setmode(GPIO.BOARD)
@@ -38,7 +38,7 @@ def isnt_stop_requested():
   return (environ.get('IS_WATERING') == 'True')
 
 def water(source):
-  apscheduler.schedulers.base.BaseScheduler.pause_job()
+  # apscheduler.schedulers.base.BaseScheduler.pause_job()
   environ['IS_WATERING'] = 'True'
   print("Water IS_WATERING = True")
   file_manager.write(source)
@@ -62,5 +62,5 @@ def water(source):
   environ['IS_WATERING'] = 'False'
   print("Water IS_WATERING = False")
   print("WATERER::stop watering!")
-  apscheduler.schedulers.base.BaseScheduler.resume_job()
+  # apscheduler.schedulers.base.BaseScheduler.resume_job()
 
