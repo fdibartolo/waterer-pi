@@ -61,21 +61,13 @@ def toggle_auto():
     environ['AUTO_ENABLED'] = 'True'
   return redirect('/', code=302)
 
-@app.route('/set_area_1_time', methods=['POST'])
-def set_area_1_time():
-  set_area_time(1)
+@app.route('/set_areas_time', methods=['POST'])
+def set_areas_time():
+  print('setting area 1 watering time to ' + str(request.form['timeArea1']) + ' seconds')
+  print('setting area 2 watering time to ' + str(request.form['timeArea2']) + ' seconds')
+  environ['TIME_AREA_1'] = request.form['timeArea1']
+  environ['TIME_AREA_2'] = request.form['timeArea2']
   return redirect('/', code=302)
-
-@app.route('/set_area_2_time', methods=['POST'])
-def set_area_2_time():
-  set_area_time(2)
-  return redirect('/', code=302)
-
-def set_area_time(area_nbr):
-  var = 'TIME_AREA_1' if area_nbr == 1 else 'TIME_AREA_2'
-  val = request.form['timeArea1'] if area_nbr == 1 else request.form['timeArea2']
-  print('setting area ' + str(area_nbr) + ' watering time to ' + str(val) + ' seconds')
-  environ[var] = val
 
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())

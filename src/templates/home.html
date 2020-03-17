@@ -38,16 +38,17 @@
       <br><a href="/toggle_auto" class="btn btn-outline-secondary btn-sm mt-2">{{ button_text }}</a>
     </div>
     <hr>
-    <h5>Timing settings</h5>
-    <form class="form-inline mb-3" action="{{ url_for('set_area_1_time') }}" method="post">
-      <span class="font-weight-light col-5 text-right">Area 1 (sec)</span> &nbsp;
-      <input type="text" class="col-3" name="timeArea1" value={{ time_area_1 }}> &nbsp;
-      <button type="submit" class="btn btn-outline-primary btn-sm col-3">Save</button>
-    </form>
-    <form class="form-inline" action="{{ url_for('set_area_2_time') }}" method="post">
-      <span class="font-weight-light col-5 text-right">Area 2 (sec)</span> &nbsp;
-      <input type="text" class="col-3" name="timeArea2" value={{ time_area_2 }}> &nbsp;
-      <button type="submit" class="btn btn-outline-primary btn-sm col-3">Save</button>
+    <h5>Timing settings <small>(seconds)</small></h5>
+    <form class="form-inline mb-3" action="{{ url_for('set_areas_time') }}" method="post">
+      <div class="col-5">
+        <span class="font-weight-light text-right">Area 1</span><br>
+        <input type="text" name="timeArea1" value={{ time_area_1 }}>
+      </div>
+      <div class="col-5">
+        <span class="font-weight-light text-right">Area 2</span><br>
+        <input type="text" name="timeArea2" value={{ time_area_2 }}>
+      </div>
+      <button type="submit" class="btn btn-outline-primary btn-sm col-2">Save</button>
     </form>
     <hr>
     <h5>Last 3 runs <span class="float-right"><small>{{ server_datetime }}</small></span></h5>
