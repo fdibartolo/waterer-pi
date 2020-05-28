@@ -42,11 +42,11 @@
     <form class="form-inline mb-3" action="{{ url_for('set_areas_time') }}" method="post">
       <div class="col-5">
         <span class="font-weight-light text-right">Area 1</span><br>
-        <input type="text" name="timeArea1" value={{ time_area_1 }}>
+        <input type="text" name="timeArea1" class="w-75" value={{ time_area_1 }}>
       </div>
       <div class="col-5">
         <span class="font-weight-light text-right">Area 2</span><br>
-        <input type="text" name="timeArea2" value={{ time_area_2 }}>
+        <input type="text" name="timeArea2" class="w-75" value={{ time_area_2 }}>
       </div>
       <button type="submit" class="btn btn-outline-primary btn-sm col-2">Save</button>
     </form>
