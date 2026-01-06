@@ -71,6 +71,12 @@ def set_areas_time():
   env['TIME_AREA_2'] = request.form['timeArea2']
   return redirect('/', code=302)
 
+@app.route('/set_water_schedule', methods=['POST'])
+def set_water_schedule():
+  print('setting watering schedule to ' + str(request.form['schedule']))
+  env['HOUR'], env['MINUTE'] = request.form['schedule'].split(':')
+  return redirect('/', code=302)
+
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())
 atexit.register(lambda: waterer.shutdown())
