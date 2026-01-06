@@ -37,7 +37,7 @@ def home():
 @app.route('/healthcheck')
 def health_check():
   waterer.toggle_led()
-  return jsonify({'health': 'good!'})
+  return redirect('/', code=302)
 
 @app.route('/get_datetime')
 def get_datetime():
