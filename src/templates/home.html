@@ -24,15 +24,15 @@
     <hr>
     <h2>
       Waterer
-      {% if status == 'Online' %}
-        <span class="badge badge-pill badge-success float-right" style="padding:5px 30px;font-weight:normal">{{ status }}</span>
+      {% if auto %}
+        <a href="/toggle_auto" class="float-right btn btn-outline-success btn-sm mt-2">Online</a>
       {% else %}
-        <span class="badge badge-pill badge-danger float-right" style="padding:5px 30px;font-weight:normal">{{ status }}</span>
+        <a href="/toggle_auto" class="float-right btn btn-outline-danger btn-sm mt-2">Offline</a>
       {% endif %}
     </h2>
     <hr>
     <div class="text-center">
-      {% if is_watering == True %}
+      {% if is_watering %}
         <a href="/stop" class="btn btn-danger btn-lg">
           Stop! &nbsp;&nbsp;<i class="fa fa-hand-paper-o fa-lg fa-2x"></i>
         </a>
@@ -42,12 +42,12 @@
         </a>
       {% endif %}
       <hr>
-      {% if auto == True %}
+      {% if auto %}
         <span class="font-weight-light">Automatic watering is set to run everyday at {{ time }}hs (UTC)</span>
       {% else %}
         <span class="font-weight-light">Automatic watering is <strong>currently disabled</strong></span>
       {% endif %}
-      <br><a href="/toggle_auto" class="btn btn-outline-secondary btn-sm mt-2">{{ button_text }}</a>
+      <br>
     </div>
     <hr>
     <h5>Timing settings <small>(seconds)</small></h5>
