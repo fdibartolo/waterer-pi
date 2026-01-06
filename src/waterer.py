@@ -4,11 +4,12 @@ except ImportError:
   pass
 import time
 import datetime
-import file_manager
 from os import environ
 
 class Waterer:
-  def __init__(self):
+  def __init__(self, file_manager):
+    self.file_manager = file_manager
+
     # pinout setup
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(3, GPIO.IN) # button
@@ -43,7 +44,7 @@ class Waterer:
   def water(self, source):
     environ['IS_WATERING'] = 'True'
     print("Water IS_WATERING = True")
-    file_manager.write(source)
+    self.file_manager.write(source)
     print("WATERER::triggered via " + source)
     print("WATERER::start watering area 1...")
     time_area_1 = int(environ.get('TIME_AREA_1'))
@@ -66,7 +67,8 @@ class Waterer:
     print("WATERER::stop watering!")
 
 class WatererLocal:
-  def __init__(self):
+  def __init__(self, file_manager):
+    self.file_manager = file_manager
     print("WATERER::initializing local instance...")
 
   def is_button_pressed(self):
@@ -74,6 +76,7 @@ class WatererLocal:
 
   def water(self, source):
     print("WATERER::(local) triggered via " + source)
+    self.file_manager.write(source)
     
   def toggle_led(self):
     print("WATERER::(local) toggle led")

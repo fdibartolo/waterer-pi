@@ -4,7 +4,7 @@ from os import environ
 import datetime
 import atexit
 from waterer import Waterer, WatererLocal
-import file_manager
+from file_manager import FileManager
 from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
@@ -83,7 +83,8 @@ def is_raspberrypi():
   return False
   
 if __name__ == '__main__':
-  waterer = Waterer() if is_raspberrypi() else WatererLocal()
+  file_manager = FileManager('./last_run.txt')
+  waterer = Waterer(file_manager) if is_raspberrypi() else WatererLocal(file_manager)
   scheduler = BackgroundScheduler()
   scheduler.add_job(schedule, 'interval', seconds=1)
 
