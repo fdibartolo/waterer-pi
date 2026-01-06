@@ -41,6 +41,11 @@ def health_check():
   waterer.toggle_led()
   return jsonify({'health': 'good!'})
 
+@app.route('/get_datetime')
+def get_datetime():
+  now = datetime.datetime.now()
+  return jsonify({'server_datetime' : now.strftime('%b %d, %H:%Mhs')})
+
 @app.route('/water')
 def water():
   global is_web_triggered

@@ -8,6 +8,18 @@
 </head>
 
 <body>
+  <script>
+      function updateDateAndTime() {
+        fetch('/get_datetime')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('datetime').textContent = data['server_datetime'];
+          })
+          .catch(error => console.error('Error fetching time:', error));
+      }
+      setInterval(updateDateAndTime, 60000);
+  </script>
+
   <div class="container">
     <hr>
     <h2>
@@ -51,7 +63,7 @@
       <button type="submit" class="btn btn-outline-primary btn-sm col-2">Save</button>
     </form>
     <hr>
-    <h5>Last 3 runs <span class="float-right"><small>{{ server_datetime }}</small></span></h5>
+    <h5>Last 3 runs <span class="float-right"><small><span id="datetime">{{ server_datetime }}</span></small></span></h5>
     <ul class="small list-group">
       {% for line in log %}
       <li class="list-group-item list-group-item-light">{{ line }}</li>
