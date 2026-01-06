@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, render_template, redirect, request
+import io
 from os import environ
 import datetime
 import atexit
-import waterer
+from waterer import Waterer, WatererLocal
 import file_manager
 from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
@@ -72,9 +73,17 @@ def set_areas_time():
 atexit.register(lambda: scheduler.shutdown())
 atexit.register(lambda: waterer.shutdown())
 
+def is_raspberrypi():
+  try:
+    with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
+      if 'raspberry pi' in m.read().lower():
+        return True
+  except Exception:
+    pass
+  return False
+  
 if __name__ == '__main__':
-  waterer.setup()
-  waterer.init()
+  waterer = Waterer() if is_raspberrypi() else WatererLocal()
   scheduler = BackgroundScheduler()
   scheduler.add_job(schedule, 'interval', seconds=1)
 
