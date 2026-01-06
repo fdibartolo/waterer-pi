@@ -17,10 +17,10 @@ class Waterer:
 
     # pinout setup
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(Waterer.BUTTON, GPIO.IN) # button
-    GPIO.setup(Waterer.STATUS_LED, GPIO.OUT, initial=GPIO.LOW) # led
-    GPIO.setup(Waterer.RELE_1, GPIO.OUT, initial=GPIO.HIGH) # rele 1
-    GPIO.setup(Waterer.RELE_2, GPIO.OUT, initial=GPIO.HIGH) # rele 2
+    GPIO.setup(Waterer.BUTTON, GPIO.IN)
+    GPIO.setup(Waterer.STATUS_LED, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(Waterer.RELE_1, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(Waterer.RELE_2, GPIO.OUT, initial=GPIO.HIGH)
 
     print("WATERER::initializing...")
     GPIO.output(Waterer.RELE_1, GPIO.HIGH)
