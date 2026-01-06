@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, render_template, redirect, request
 from os import environ
 import datetime
-import time
 import atexit
 import waterer
 import file_manager
