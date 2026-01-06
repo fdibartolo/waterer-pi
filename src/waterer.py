@@ -4,7 +4,7 @@ except ImportError:
   pass
 import time
 import datetime
-from os import environ
+from os import environ as env
 
 class Waterer:
   def __init__(self, file_manager):
@@ -39,15 +39,15 @@ class Waterer:
     return (GPIO.input(3) == 0)
 
   def __isnt_stop_requested(self):
-    return (environ.get('IS_WATERING') == 'True')
+    return (env.get('IS_WATERING') == 'True')
 
   def water(self, source):
-    environ['IS_WATERING'] = 'True'
+    env['IS_WATERING'] = 'True'
     print("Water IS_WATERING = True")
     self.file_manager.write(source)
     print("WATERER::triggered via " + source)
     print("WATERER::start watering area 1...")
-    time_area_1 = int(environ.get('TIME_AREA_1'))
+    time_area_1 = int(env.get('TIME_AREA_1'))
     now = datetime.datetime.now()
     GPIO.output(7, GPIO.LOW)
     while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_1):
@@ -55,14 +55,14 @@ class Waterer:
     GPIO.output(7, GPIO.HIGH)
 
     print("WATERER::stop area 1 and start watering area 2...")
-    time_area_2 = int(environ.get('TIME_AREA_2'))
+    time_area_2 = int(env.get('TIME_AREA_2'))
     now = datetime.datetime.now()
     GPIO.output(13, GPIO.LOW)
     while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_2):
       self.toggle_led()
     GPIO.output(13, GPIO.HIGH)
 
-    environ['IS_WATERING'] = 'False'
+    env['IS_WATERING'] = 'False'
     print("Water IS_WATERING = False")
     print("WATERER::stop watering!")
 
@@ -75,8 +75,25 @@ class WatererLocal:
     return False
 
   def water(self, source):
-    print("WATERER::(local) triggered via " + source)
+    env['IS_WATERING'] = 'True'
     self.file_manager.write(source)
+    print("WATERER::(local) triggered via " + source)
+    print("WATERER::(local) start watering area 1...")
+    time_area_1 = int(env.get('TIME_AREA_1'))
+    now = datetime.datetime.now()
+    while ((datetime.datetime.now() - now).seconds < time_area_1):
+      print(".", end="", flush=True)
+      time.sleep(1)
+
+    print("\nWATERER::(local) stop area 1 and start watering area 2...")
+    time_area_2 = int(env.get('TIME_AREA_2'))
+    now = datetime.datetime.now()
+    while ((datetime.datetime.now() - now).seconds < time_area_2):
+      print(".", end="", flush=True)
+      time.sleep(1)
+      
+    env['IS_WATERING'] = 'False'
+    print("\nWATERER::(local) stop watering!")
     
   def toggle_led(self):
     print("WATERER::(local) toggle led")
