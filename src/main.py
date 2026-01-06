@@ -59,8 +59,10 @@ def stop_watering():
 def toggle_auto():
   if env.get('AUTO_ENABLED') == 'True':
     env['AUTO_ENABLED'] = 'False'
+    scheduler.remove_job('auto_water_job')
   else:
     env['AUTO_ENABLED'] = 'True'
+    set_auto_water_scheduler()
   return redirect('/', code=302)
 
 @app.route('/set_areas_time', methods=['POST'])
@@ -73,13 +75,9 @@ def set_areas_time():
 
 @app.route('/set_water_schedule', methods=['POST'])
 def set_water_schedule():
-  print('setting watering schedule to ' + str(request.form['schedule']))
   env['HOUR'], env['MINUTE'] = request.form['schedule'].split(':')
+  set_auto_water_scheduler()
   return redirect('/', code=302)
-
-# Shut down the scheduler & gpio when exiting the app
-atexit.register(lambda: scheduler.shutdown())
-atexit.register(lambda: waterer.shutdown())
 
 def is_raspberrypi():
   try:
@@ -107,20 +105,27 @@ def init_envvars():
     
   if env.get('TIME_AREA_2') is None:
     env['TIME_AREA_2'] = '0'
-    
+
+def set_auto_water_scheduler():
+  if scheduler.get_job('auto_water_job'):
+    scheduler.remove_job('auto_water_job')
+  print(f"setting scheduler for automatic watering to {env.get('HOUR')}:{env.get('MINUTE')} hs")
+  scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=int(env.get('HOUR')), minute=int(env.get('MINUTE')), id='auto_water_job')
+
+# Shut down the scheduler & gpio when exiting the app
+atexit.register(lambda: scheduler.shutdown())
+atexit.register(lambda: waterer.shutdown())
+
 if __name__ == '__main__':
   file_manager = FileManager('./last_run.txt')
   waterer = Waterer(file_manager) if is_raspberrypi() else WatererLocal(file_manager)
-  scheduler = BackgroundScheduler()
+  scheduler = BackgroundScheduler({'apscheduler.timezone': 'America/Argentina/Buenos_Aires'})
   scheduler.add_job(schedule, 'interval', seconds=1)
 
   init_envvars()
 
   if env.get('AUTO_ENABLED') == 'True':
-    hh = env.get('HOUR')
-    mm = env.get('MINUTE')
-    print('setting scheduler for automatic watering to ' + hh + ':' + mm + 'hs (UTC)')
-    scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=int(hh), minute=int(mm))
+    set_auto_water_scheduler()
 
   scheduler.start()
   app.run(host='0.0.0.0', port=80)
