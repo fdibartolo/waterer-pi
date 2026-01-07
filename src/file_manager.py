@@ -10,10 +10,7 @@ class FileManager:
 
   def write(self, source):
     timestamp = datetime.datetime.now()
-    line = 'Triggered via ' + source + ' on ' + timestamp.strftime('%b %d') + ' at ' + timestamp.strftime('%H:%M') + ' hs\n'
-
-    if not os.path.isfile(self.file_path):
-      open(self.file_path, 'w').close()
+    line = f"Triggered via {source} on {timestamp.strftime('%b %d')} at {timestamp.strftime('%H:%M')} hs\n"
 
     f = open(self.file_path, 'r')
     lines = f.readlines()
