@@ -24,7 +24,7 @@ def auto_water():
 @app.route('/')
 def home():
   templateData = {
-    'log' : file_manager.read(),
+    'log' : file_manager.read_log(),
     'server_datetime' : datetime.datetime.now().strftime('%b %d, %H:%Mhs'),
     'is_watering' : env.get('IS_WATERING') == 'True',
     'auto' : env.get('AUTO_ENABLED') == 'True',
@@ -88,23 +88,13 @@ def is_raspberrypi():
     pass
   return False
 
-def init_envvars():
+def init_env_vars_from(config):
   env['IS_WATERING'] = 'False'
-  
-  if env.get('AUTO_ENABLED') is None:
-    env['AUTO_ENABLED'] = 'False'
-    
-  if env.get('HOUR') is None:
-    env['HOUR'] = '00'
-    
-  if env.get('MINUTE') is None:
-    env['MINUTE'] = '00'
-    
-  if env.get('TIME_AREA_1') is None:
-    env['TIME_AREA_1'] = '0'
-    
-  if env.get('TIME_AREA_2') is None:
-    env['TIME_AREA_2'] = '0'
+  env['AUTO_ENABLED'] = config.get('auto_enabled', 'False')
+  env['HOUR'] = config.get('scheduled_hour', '00')
+  env['MINUTE'] = config.get('scheduled_minute', '00')
+  env['TIME_AREA_1'] = config.get('time_area_1', '0')
+  env['TIME_AREA_2'] = config.get('time_area_2', '0')
 
 def set_auto_water_scheduler():
   if scheduler.get_job('auto_water_job'):
@@ -114,15 +104,23 @@ def set_auto_water_scheduler():
 
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())
+atexit.register(lambda: file_manager.save_config({
+  'auto_enabled': env.get('AUTO_ENABLED'),
+  'scheduled_hour': env.get('HOUR'),
+  'scheduled_minute': env.get('MINUTE'),
+  'time_area_1': env.get('TIME_AREA_1'),
+  'time_area_2': env.get('TIME_AREA_2')
+}))
 atexit.register(lambda: waterer.shutdown())
 
 if __name__ == '__main__':
-  file_manager = FileManager('./last_run.txt')
+  file_manager = FileManager(log_file='./last_run.txt', config_file='./config.json')
   waterer = Waterer(file_manager) if is_raspberrypi() else WatererLocal(file_manager)
   scheduler = BackgroundScheduler({'apscheduler.timezone': 'America/Argentina/Buenos_Aires'})
   scheduler.add_job(schedule, 'interval', seconds=1)
 
-  init_envvars()
+  config = file_manager.load_config()
+  init_env_vars_from(config)
 
   if env.get('AUTO_ENABLED') == 'True':
     set_auto_water_scheduler()

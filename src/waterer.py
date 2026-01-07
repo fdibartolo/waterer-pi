@@ -49,7 +49,7 @@ class Waterer:
   def water(self, source):
     env['IS_WATERING'] = 'True'
     print("Water IS_WATERING = True")
-    self.file_manager.write(source)
+    self.file_manager.write_log(source)
     print("WATERER::triggered via " + source)
     print("WATERER::start watering area 1...")
     time_area_1 = int(env.get('TIME_AREA_1'))
@@ -81,7 +81,7 @@ class WatererLocal:
 
   def water(self, source):
     env['IS_WATERING'] = 'True'
-    self.file_manager.write(source)
+    self.file_manager.write_log(source)
     print("WATERER::(local) triggered via " + source)
     print("WATERER::(local) start watering area 1...")
     time_area_1 = int(env.get('TIME_AREA_1'))
