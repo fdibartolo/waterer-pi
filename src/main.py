@@ -23,6 +23,16 @@ def home():
   }
   return render_template('home.html', **templateData)
 
+@app.route('/tank')
+def water_tank():
+  templateData = {
+    'server_datetime' : datetime.datetime.now().strftime('%b %d, %H:%Mhs'),
+    'is_filling' : False,
+    'auto' : True,
+    'time' : 60
+  }
+  return render_template('water_tank.html', **templateData)
+
 @app.route('/healthcheck')
 def health_check():
   waterer.toggle_led()

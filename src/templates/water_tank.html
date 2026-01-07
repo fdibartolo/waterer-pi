@@ -24,78 +24,51 @@
 
   <div class="container">
     <hr>
-
     <div class="row">
-        <div class="col-6"><h2>Waterer &nbsp;<small><a href="/tank" class="small text-secondary">Water Tank</a></small></h2></div>
-        <div class="col-6">
-          {% if auto %}
-            <a href="/toggle_auto" class="float-right btn btn-outline-success btn-sm mt-2">Online</a>
-          {% else %}
-            <a href="/toggle_auto" class="float-right btn btn-outline-danger btn-sm mt-2">Offline</a>
-          {% endif %}
-        </div>
+        <div class="col-6"><h2><small><a href="/" class="small text-secondary">Waterer</a></small>&nbsp;&nbsp; Water Tank</h2></div>
+        <div class="col-6"><span class="float-right"><span id="datetime">{{ server_datetime }}</span></span></div>
     </div>
     <hr>
     <div class="text-center">
-      {% if is_watering %}
-        <a href="/stop" class="btn btn-danger btn-lg">
+      {% if is_filling %}
+        <a href="/" class="btn btn-danger btn-lg">
           Stop! &nbsp;&nbsp;<i class="fa fa-hand-paper-o fa-lg fa-2x"></i>
         </a>
       {% else %}
-        <a href="/water" class="btn btn-primary btn-lg">
-          Water Now &nbsp;&nbsp;<i class="fa fa-tint fa-2x"></i>&nbsp;<i class="fa fa-tint fa-lg"></i>
+        <a href="/" class="btn btn-primary btn-lg">
+          Manual Fill &nbsp;&nbsp;<i class="fa fa-tint fa-2x"></i>&nbsp;<i class="fa fa-tint fa-lg"></i>
         </a>
       {% endif %}
       <hr>
       {% if auto %}
         <span class="font-weight-light">
-          Automatic watering is set to run everyday at 
-          <a class="border border-secondary rounded text-left p-1" data-toggle="modal" data-target="#scheduleModalForm">{{ time }}hs &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a>
+          Tank level is being monitored every
+          <a class="border border-secondary rounded text-left p-1" data-toggle="modal" data-target="#tankMonitoringModalForm">{{ time }} minutes &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a>
         </span>
       {% else %}
-        <span class="font-weight-light">Automatic watering is <strong>currently disabled</strong></span>
+        <span class="font-weight-light">Tank level is <strong>currently not monitored</strong></span>
       {% endif %}
       <br>
     </div>
     <hr>
-    <h5>Timing settings <small>(seconds)</small></h5>
-    <form class="form-inline mb-3 border border-secondary rounded p-3" action="{{ url_for('set_areas_time') }}" method="post">
-      <div class="col-5">
-        <span class="font-weight-light text-right">Area 1</span>&nbsp;&nbsp;
-        <input type="text" name="timeArea1" class="w-50" value={{ time_area_1 }}>
-      </div>
-      <div class="col-5">
-        <span class="font-weight-light text-right">Area 2</span>&nbsp;&nbsp;
-        <input type="text" name="timeArea2" class="w-50" value={{ time_area_2 }}>
-      </div>
-      <button type="submit" class="btn btn-outline-primary btn-sm col-2">Save</button>
-    </form>
-    <hr>
-    <h5>Last 3 runs <span class="float-right"><small><span id="datetime">{{ server_datetime }}</span></small></span></h5>
-    <ul class="small list-group">
-      {% for line in log %}
-      <li class="list-group-item list-group-item-light">{{ line }}</li>
-      {% endfor %}
-    </ul>
-    <hr>
-    <a href="/healthcheck" class="float-right btn btn-outline-secondary btn-sm mt-2">
-      <i class="fa fa-heartbeat fa-lg">&nbsp;&nbsp;</i>System Check
+    <a href="/meassure_tank" class="float-right btn btn-outline-secondary btn-sm mt-2">
+      <i class="fa fa-tachometer fa-lg">&nbsp;&nbsp;</i>Check Tank Level
     </a>
   </div>
 
-  <!-- Modal dialog to update schedule-->
-  <div class="modal fade" id="scheduleModalForm" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+  <!-- Modal dialog to update tank monitoring schedule-->
+  <div class="modal fade" id="tankMonitoringModalForm" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">Waterer Schedule</h5>
+          <h5 class="modal-title" id="modalTitle">Waterer Tank Monitoring Schedule</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form class="form-inline" action="{{ url_for('set_water_schedule') }}" method="post">
+        <form class="form-inline">
           <div class="modal-body col-6">
-            <input type="text" name="schedule" value={{ time }}>
+            <input type="text" name="monitoring" value={{ time }}>
           </div>
           <div class="modal-footer col-6">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
