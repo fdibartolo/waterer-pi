@@ -10,17 +10,6 @@ app = Flask(__name__)
 
 is_web_triggered = False
 
-def schedule():
-  global is_web_triggered
-  if waterer.is_button_pressed():
-    waterer.water('BUTTON')
-  elif is_web_triggered:
-    is_web_triggered = False
-    waterer.water('WEB')
-
-def auto_water():
-  waterer.water('AUTO')
-
 @app.route('/')
 def home():
   templateData = {
@@ -67,8 +56,8 @@ def toggle_auto():
 
 @app.route('/set_areas_time', methods=['POST'])
 def set_areas_time():
-  print('setting area 1 watering time to ' + str(request.form['timeArea1']) + ' seconds')
-  print('setting area 2 watering time to ' + str(request.form['timeArea2']) + ' seconds')
+  print(f"Area 1 watering time set to {request.form['timeArea1']} seconds")
+  print(f"Area 2 watering time set to {request.form['timeArea2']} seconds")
   env['TIME_AREA_1'] = request.form['timeArea1']
   env['TIME_AREA_2'] = request.form['timeArea2']
   return redirect('/', code=302)
@@ -79,14 +68,16 @@ def set_water_schedule():
   set_auto_water_scheduler()
   return redirect('/', code=302)
 
-def is_raspberrypi():
-  try:
-    with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
-      if 'raspberry pi' in m.read().lower():
-        return True
-  except Exception:
-    pass
-  return False
+def schedule():
+  global is_web_triggered
+  if waterer.is_button_pressed():
+    waterer.water('BUTTON')
+  elif is_web_triggered:
+    is_web_triggered = False
+    waterer.water('WEB')
+
+def auto_water():
+  waterer.water('AUTO')
 
 def init_env_vars_from(config):
   env['IS_WATERING'] = 'False'
@@ -99,8 +90,17 @@ def init_env_vars_from(config):
 def set_auto_water_scheduler():
   if scheduler.get_job('auto_water_job'):
     scheduler.remove_job('auto_water_job')
-  print(f"setting scheduler for automatic watering to {env.get('HOUR')}:{env.get('MINUTE')} hs")
+  print(f"Automatic watering scheduled to {env.get('HOUR')}:{env.get('MINUTE')} hs")
   scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=int(env.get('HOUR')), minute=int(env.get('MINUTE')), id='auto_water_job')
+
+def is_raspberrypi():
+  try:
+    with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
+      if 'raspberry pi' in m.read().lower():
+        return True
+  except Exception:
+    pass
+  return False
 
 # Shut down the scheduler & gpio when exiting the app
 atexit.register(lambda: scheduler.shutdown())
