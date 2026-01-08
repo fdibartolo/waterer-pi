@@ -79,6 +79,9 @@ class WatererLocal:
   def is_button_pressed(self):
     return False
 
+  def __isnt_stop_requested(self):
+    return (env.get('IS_WATERING') == 'True')
+
   def water(self, source):
     env['IS_WATERING'] = 'True'
     self.file_manager.write_log(source)
@@ -86,14 +89,14 @@ class WatererLocal:
     print("WATERER::(local) start watering area 1...")
     time_area_1 = int(env.get('TIME_AREA_1'))
     now = datetime.datetime.now()
-    while ((datetime.datetime.now() - now).seconds < time_area_1):
+    while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_1):
       print(".", end="", flush=True)
       time.sleep(1)
 
     print("\nWATERER::(local) stop area 1 and start watering area 2...")
     time_area_2 = int(env.get('TIME_AREA_2'))
     now = datetime.datetime.now()
-    while ((datetime.datetime.now() - now).seconds < time_area_2):
+    while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_2):
       print(".", end="", flush=True)
       time.sleep(1)
       

@@ -36,6 +36,7 @@ def get_datetime():
 def water():
   global is_web_triggered
   is_web_triggered = True
+  env['IS_WATERING'] = 'True'
   return redirect('/', code=302)
 
 @app.route('/stop')
