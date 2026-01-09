@@ -14,6 +14,7 @@ class Waterer:
   
   def __init__(self, file_manager):
     self.file_manager = file_manager
+    print(f"WATERER::starting as {type(self).__name__} mode...")
 
     # pinout setup
     GPIO.setmode(GPIO.BOARD)
@@ -22,7 +23,6 @@ class Waterer:
     GPIO.setup(Waterer.RELE_1, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.setup(Waterer.RELE_2, GPIO.OUT, initial=GPIO.HIGH)
 
-    print("WATERER::initializing...")
     GPIO.output(Waterer.RELE_1, GPIO.HIGH)
     GPIO.output(Waterer.RELE_2, GPIO.HIGH)
     now = datetime.datetime.now()
@@ -74,7 +74,7 @@ class Waterer:
 class WatererLocal:
   def __init__(self, file_manager):
     self.file_manager = file_manager
-    print("WATERER::initializing local instance...")
+    print(f"WATERER::starting as {type(self).__name__} mode...")
 
   def is_button_pressed(self):
     return False
