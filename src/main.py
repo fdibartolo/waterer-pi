@@ -127,4 +127,4 @@ if __name__ == '__main__':
     set_auto_water_scheduler()
 
   scheduler.start()
-  app.run(host='0.0.0.0', port=80)
+  app.run(host='0.0.0.0')
