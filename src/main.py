@@ -4,6 +4,7 @@ from os import environ as env
 import datetime
 import atexit
 from waterer import Waterer, WatererLocal
+from water_tank import WaterTank, WaterTankLocal
 from file_manager import FileManager
 from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
@@ -24,14 +25,30 @@ def home():
   return render_template('home.html', **templateData)
 
 @app.route('/tank')
-def water_tank():
+def tank():
   templateData = {
     'server_datetime' : datetime.datetime.now().strftime('%b %d, %H:%Mhs'),
     'is_filling' : False,
+    'is_measuring' : env.get('IS_MEASURING') == 'True',
     'auto' : True,
     'time' : 60
   }
   return render_template('water_tank.html', **templateData)
+
+@app.route('/measure_tank')
+def measure_tank():
+  if env.get('IS_MEASURING') == 'True':
+    env['IS_MEASURING'] = 'False'
+  else:
+    env['TANK_LEVEL'] = "13"
+    env['IS_MEASURING'] = 'True'
+  return redirect('/tank', code=302)
+
+@app.route('/get_tank_level')
+def get_tank_level():
+  if env.get('IS_MEASURING') == 'True':
+    env['TANK_LEVEL'] = str(water_tank.measure_distance())
+  return jsonify({'tank_level' : env.get('TANK_LEVEL')})
 
 @app.route('/healthcheck')
 def health_check():
@@ -97,6 +114,7 @@ def init_env_vars_from(config):
   env['MINUTE'] = config.get('scheduled_minute', '00')
   env['TIME_AREA_1'] = config.get('time_area_1', '0')
   env['TIME_AREA_2'] = config.get('time_area_2', '0')
+  env['IS_MEASURING'] = 'False'
 
 def set_auto_water_scheduler():
   if scheduler.get_job('auto_water_job'):
@@ -127,6 +145,7 @@ atexit.register(lambda: waterer.shutdown())
 if __name__ == '__main__':
   file_manager = FileManager(log_file='./last_run.txt', config_file='./config.json')
   waterer = Waterer(file_manager) if is_raspberrypi() else WatererLocal(file_manager)
+  water_tank = WaterTank() if is_raspberrypi() else WaterTankLocal()
   scheduler = BackgroundScheduler({'apscheduler.timezone': 'America/Argentina/Buenos_Aires'})
   scheduler.add_job(schedule, 'interval', seconds=1)
 
