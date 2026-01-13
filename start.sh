@@ -10,6 +10,8 @@ if [[ $1 == "-d" ]]; then # start as deamon
   MAIN_PID=$!
 
   echo -e "\nStarted! (PID $MAIN_PID)\n"
+elif [[ $1 == "-v" ]]; then # start as debug mode ON
+  FLASK_DEBUG=1 python src/main.py
 else
   python src/main.py
 fi
