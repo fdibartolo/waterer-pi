@@ -46,6 +46,7 @@ def get_datetime():
 def water():
   global is_web_triggered
   is_web_triggered = True
+  env['IS_WATERING'] = 'True'
   return redirect('/', code=302)
 
 @app.route('/stop')
@@ -136,4 +137,4 @@ if __name__ == '__main__':
     set_auto_water_scheduler()
 
   scheduler.start()
-  app.run(host='0.0.0.0', port=80)
+  app.run(host='0.0.0.0')
