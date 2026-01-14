@@ -34,7 +34,7 @@ class WaterTank:
       return 0
     else:
       percentage = 100 - ((dist - self.SENSOR_OFFSET)/(self.EMPTY_DISTANCE - self.SENSOR_OFFSET)*100)
-      return round(percentage, 0)
+      return int(percentage)
     
   def measure_distance(self):
     GPIO.output(WaterTank.ULTRASONIC_TRIGGER, GPIO.HIGH)
@@ -56,7 +56,7 @@ class WaterTankLocal:
     print(f"WATERTANK::starting as {type(self).__name__} mode...")
 
   def measure_distance(self):
-    return round(random.uniform(0, 100), 2) # dummy distance
+    return int(random.uniform(0, 100)) # dummy distance
     
   def shutdown(self):
     print("WATERTANK::(local) goodbye!")
