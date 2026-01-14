@@ -58,7 +58,12 @@
       <br>
     </div>
     <hr>
-    <h5>Timing settings <small>(seconds)</small></h5>
+    <div class="row">
+      <div class="col-8"><h5>Timing settings <small>(seconds)</small></h5></div>
+      <div class="col-4">
+        <span class="float-right" id="datetime">{{ server_datetime }}</span>
+      </div>
+    </div>
     <form class="form-inline mb-3 border border-secondary rounded p-3" action="{{ url_for('set_areas_time') }}" method="post">
       <div class="col-5">
         <span class="font-weight-light text-right">Area 1</span>&nbsp;&nbsp;
@@ -71,16 +76,19 @@
       <button type="submit" class="btn btn-outline-primary btn-sm col-2">Save</button>
     </form>
     <hr>
-    <h5>Last 3 runs <span class="float-right"><small><span id="datetime">{{ server_datetime }}</span></small></span></h5>
+    <div class="row pb-2">
+      <div class="col-6"><h5>Last 3 runs</h5></div>
+      <div class="col-6">
+        <a href="/healthcheck" class="float-right btn btn-outline-secondary btn-sm">
+          <i class="fa fa-heartbeat fa-lg">&nbsp;&nbsp;</i>System Check
+        </a>
+      </div>
+    </div>
     <ul class="small list-group">
       {% for line in log %}
       <li class="list-group-item list-group-item-light">{{ line }}</li>
       {% endfor %}
     </ul>
-    <hr>
-    <a href="/healthcheck" class="float-right btn btn-outline-secondary btn-sm mt-2">
-      <i class="fa fa-heartbeat fa-lg">&nbsp;&nbsp;</i>System Check
-    </a>
   </div>
 
   <!-- Modal dialog to update schedule-->
