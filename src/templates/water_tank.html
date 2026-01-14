@@ -10,8 +10,9 @@
 </head>
 
 <body>
+  {% if is_measuring %}
   <script>
-      function updateTankLevel() {
+    function updateTankLevel() {
         fetch('/get_tank_level')
           .then(response => response.json())
           .then(data => {
@@ -20,7 +21,8 @@
           .catch(error => console.error('Error fetching time:', error));
       }
       setInterval(updateTankLevel, 2000);
-    </script>
+  </script>
+  {% endif %}
 
   <div class="container">
     <hr>
