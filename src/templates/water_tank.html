@@ -44,7 +44,7 @@
       {% if auto %}
         <span class="font-weight-light">
           Tank level is being monitored every
-          <a class="border border-secondary rounded text-left p-1" data-toggle="modal" data-target="#tankMonitoringModalForm">{{ time }} minutes &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a>
+          <a class="border border-secondary rounded text-left p-1" data-toggle="modal" data-target="#tankMonitoringModalForm">{{ time }} mins &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a>
         </span>
       {% else %}
         <span class="font-weight-light">Tank level is <strong>currently not monitored</strong></span>
@@ -52,7 +52,7 @@
       <br>
     </div>
     <hr>
-    <div class="row">
+    <div class="row pb-3">
       <div class="col-12">
         <a href="/measure_tank" class="float-right btn btn-outline-secondary btn-sm">
           {% if is_measuring %}
