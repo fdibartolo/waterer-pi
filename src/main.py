@@ -131,16 +131,20 @@ def is_raspberrypi():
     pass
   return False
 
-# Shut down the scheduler & gpio when exiting the app
-atexit.register(lambda: scheduler.shutdown())
-atexit.register(lambda: file_manager.save_config({
-  'auto_enabled': env.get('AUTO_ENABLED'),
-  'scheduled_hour': env.get('HOUR'),
-  'scheduled_minute': env.get('MINUTE'),
-  'time_area_1': env.get('TIME_AREA_1'),
-  'time_area_2': env.get('TIME_AREA_2')
-}))
-atexit.register(lambda: waterer.shutdown())
+def is_main_process():
+  return not app.debug or env.get("WERKZEUG_RUN_MAIN") == "true"
+
+# Shut down the scheduler & gpio when exiting the app (only from the main process to avoid multiple registrations in debug mode)
+if is_main_process():
+  atexit.register(lambda: scheduler.shutdown())
+  atexit.register(lambda: file_manager.save_config({
+    'auto_enabled': env.get('AUTO_ENABLED'),
+    'scheduled_hour': env.get('HOUR'),
+    'scheduled_minute': env.get('MINUTE'),
+    'time_area_1': env.get('TIME_AREA_1'),
+    'time_area_2': env.get('TIME_AREA_2')
+  }))
+  atexit.register(lambda: waterer.shutdown())
 
 if __name__ == '__main__':
   file_manager = FileManager(log_file='./last_run.txt', config_file='./config.json')
