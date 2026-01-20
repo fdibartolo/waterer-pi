@@ -54,6 +54,10 @@ class Waterer:
     print("Water IS_WATERING = True")
     self.file_manager.write_log(source)
     print("WATERER::triggered via " + source)
+    
+    print("WATERER::starting water pump...")
+    GPIO.output(Waterer.RELE_MOTOR, GPIO.LOW)
+    
     print("WATERER::start watering area 1...")
     time_area_1 = int(env.get('TIME_AREA_1'))
     now = datetime.datetime.now()
@@ -69,6 +73,9 @@ class Waterer:
     while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_2):
       self.toggle_led()
     GPIO.output(Waterer.RELE_AREA_2, GPIO.HIGH)
+
+    print("WATERER::stoping water pump...")
+    GPIO.output(Waterer.RELE_MOTOR, GPIO.HIGH)
 
     env['IS_WATERING'] = 'False'
     print("Water IS_WATERING = False")
