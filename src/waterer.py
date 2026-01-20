@@ -8,9 +8,10 @@ from os import environ as env
 
 class Waterer:
   BUTTON = 3
-  STATUS_LED = 11
-  RELE_1 = 7
-  RELE_2 = 13
+  STATUS_LED = 5
+  RELE_MOTOR = 7
+  RELE_AREA_1 = 11
+  RELE_AREA_2 = 13
   
   def __init__(self, file_manager):
     self.file_manager = file_manager
@@ -20,11 +21,13 @@ class Waterer:
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(Waterer.BUTTON, GPIO.IN)
     GPIO.setup(Waterer.STATUS_LED, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(Waterer.RELE_1, GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.setup(Waterer.RELE_2, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(Waterer.RELE_MOTOR, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(Waterer.RELE_AREA_1, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(Waterer.RELE_AREA_2, GPIO.OUT, initial=GPIO.HIGH)
 
-    GPIO.output(Waterer.RELE_1, GPIO.HIGH)
-    GPIO.output(Waterer.RELE_2, GPIO.HIGH)
+    GPIO.output(Waterer.RELE_MOTOR, GPIO.HIGH)
+    GPIO.output(Waterer.RELE_AREA_1, GPIO.HIGH)
+    GPIO.output(Waterer.RELE_AREA_2, GPIO.HIGH)
     now = datetime.datetime.now()
     while (datetime.datetime.now() - now).seconds < 3:
       self.toggle_led()
@@ -54,18 +57,18 @@ class Waterer:
     print("WATERER::start watering area 1...")
     time_area_1 = int(env.get('TIME_AREA_1'))
     now = datetime.datetime.now()
-    GPIO.output(Waterer.RELE_1, GPIO.LOW)
+    GPIO.output(Waterer.RELE_AREA_1, GPIO.LOW)
     while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_1):
       self.toggle_led()
-    GPIO.output(Waterer.RELE_1, GPIO.HIGH)
+    GPIO.output(Waterer.RELE_AREA_1, GPIO.HIGH)
 
     print("WATERER::stop area 1 and start watering area 2...")
     time_area_2 = int(env.get('TIME_AREA_2'))
     now = datetime.datetime.now()
-    GPIO.output(Waterer.RELE_2, GPIO.LOW)
+    GPIO.output(Waterer.RELE_AREA_2, GPIO.LOW)
     while self.__isnt_stop_requested() and ((datetime.datetime.now() - now).seconds < time_area_2):
       self.toggle_led()
-    GPIO.output(Waterer.RELE_2, GPIO.HIGH)
+    GPIO.output(Waterer.RELE_AREA_2, GPIO.HIGH)
 
     env['IS_WATERING'] = 'False'
     print("Water IS_WATERING = False")
