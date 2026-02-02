@@ -1,7 +1,8 @@
 {
-  "auto_enabled": "False",
-  "scheduled_hour": "09",
-  "scheduled_minute": "55",
+  "auto_enabled": "True",
+  "scheduled_hour": "08",
+  "scheduled_minute": "00",
+  "scheduled_dow": "mon,tue,wed,thu,fri,sat,sun",
   "time_area_1": "20",
   "time_area_2": "5"
 }

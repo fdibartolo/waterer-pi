@@ -49,9 +49,25 @@
       <hr>
       {% if auto %}
         <span class="font-weight-light">
-          Automatic watering is set to run everyday at 
+          Automatic watering is set to run at 
           <a class="border border-secondary rounded text-left p-1" data-toggle="modal" data-target="#scheduleModalForm">{{ time }}hs &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a>
         </span>
+        <div class="row mt-3">
+          <div class="col-12 text-center">
+            <form class="form-inline" action="{{ url_for('set_areas_time') }}" method="post">
+              <div class="col-12 small">
+                <u>Daily Schedule</u>: 
+                <input type="checkbox" disabled {% if 'mon' in dow %}checked{% endif %}> Mon -
+                <input type="checkbox" disabled {% if 'tue' in dow %}checked{% endif %}> Tue -
+                <input type="checkbox" disabled {% if 'wed' in dow %}checked{% endif %}> Wed -
+                <input type="checkbox" disabled {% if 'thu' in dow %}checked{% endif %}> Thu -
+                <input type="checkbox" disabled {% if 'fri' in dow %}checked{% endif %}> Fri -
+                <input type="checkbox" disabled {% if 'sat' in dow %}checked{% endif %}> Sat -
+                <input type="checkbox" disabled {% if 'sun' in dow %}checked{% endif %}> Sun
+              </div>
+            </form>
+          </div>
+        </div>
       {% else %}
         <span class="font-weight-light">Automatic watering is <strong>currently disabled</strong></span>
       {% endif %}
@@ -102,10 +118,18 @@
           </button>
         </div>
         <form class="form-inline" action="{{ url_for('set_water_schedule') }}" method="post">
-          <div class="modal-body col-6">
-            <input type="text" name="schedule" value={{ time }}>
+          <div class="modal-body col-12">
+            <input type="text" class="mb-2" name="schedule" value={{ time }}>
+            <br>
+            <input type="checkbox" name="dow" value="mon" {% if 'mon' in dow %}checked{% endif %}><small>Mon -</small>
+            <input type="checkbox" name="dow" value="tue" {% if 'tue' in dow %}checked{% endif %}><small>Tue -</small>
+            <input type="checkbox" name="dow" value="wed" {% if 'wed' in dow %}checked{% endif %}><small>Wed -</small>
+            <input type="checkbox" name="dow" value="thu" {% if 'thu' in dow %}checked{% endif %}><small>Thu -</small>
+            <input type="checkbox" name="dow" value="fri" {% if 'fri' in dow %}checked{% endif %}><small>Fri -</small>
+            <input type="checkbox" name="dow" value="sat" {% if 'sat' in dow %}checked{% endif %}><small>Sat -</small>
+            <input type="checkbox" name="dow" value="sun" {% if 'sun' in dow %}checked{% endif %}><small>Sun</small>
           </div>
-          <div class="modal-footer col-6">
+          <div class="modal-footer col-12">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Save</button>
           </div>

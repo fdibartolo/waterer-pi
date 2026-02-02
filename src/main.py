@@ -20,7 +20,8 @@ def home():
     'auto' : env.get('AUTO_ENABLED') == 'True',
     'time' : f"{env.get('HOUR')}:{env.get('MINUTE')}",
     'time_area_1' : env.get('TIME_AREA_1'),
-    'time_area_2' : env.get('TIME_AREA_2')
+    'time_area_2' : env.get('TIME_AREA_2'),
+    'dow' : env.get('DOW', '').split(',')
   }
   return render_template('home.html', **templateData)
 
@@ -93,6 +94,7 @@ def set_areas_time():
 @app.route('/set_water_schedule', methods=['POST'])
 def set_water_schedule():
   env['HOUR'], env['MINUTE'] = request.form['schedule'].split(':')
+  env['DOW'] = ",".join(request.form.getlist('dow'))
   set_auto_water_scheduler()
   return redirect('/', code=302)
 
@@ -115,12 +117,13 @@ def init_env_vars_from(config):
   env['TIME_AREA_1'] = config.get('time_area_1', '0')
   env['TIME_AREA_2'] = config.get('time_area_2', '0')
   env['IS_MEASURING'] = 'False'
+  env['DOW'] = config.get('scheduled_dow')
 
 def set_auto_water_scheduler():
   if scheduler.get_job('auto_water_job'):
     scheduler.remove_job('auto_water_job')
-  print(f"Automatic watering scheduled to {env.get('HOUR')}:{env.get('MINUTE')} hs")
-  scheduler.add_job(auto_water, 'cron', day_of_week='mon-sun', hour=int(env.get('HOUR')), minute=int(env.get('MINUTE')), id='auto_water_job')
+  print(f"Automatic watering scheduled at {env.get('HOUR')}:{env.get('MINUTE')} hs, on days {env.get('DOW')}")
+  scheduler.add_job(auto_water, 'cron', day_of_week=env.get('DOW'), hour=int(env.get('HOUR')), minute=int(env.get('MINUTE')), id='auto_water_job')
 
 def is_raspberrypi():
   try:
@@ -141,6 +144,7 @@ if is_main_process():
     'auto_enabled': env.get('AUTO_ENABLED'),
     'scheduled_hour': env.get('HOUR'),
     'scheduled_minute': env.get('MINUTE'),
+    'scheduled_dow': env.get('DOW'),
     'time_area_1': env.get('TIME_AREA_1'),
     'time_area_2': env.get('TIME_AREA_2')
   }))
