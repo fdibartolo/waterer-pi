@@ -48,7 +48,7 @@ class Waterer:
 
     # power off rpi
     exit_code = system("sudo systemctl stop waterer.service")
-    if exit_code != 0:
+    if exit_code == 0:
       print("WATERER::powering off...")
       system("sudo poweroff")
 
