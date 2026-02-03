@@ -27,11 +27,11 @@
 
     <div class="row">
         <div class="col-6"><h2>Waterer &nbsp;<small><a href="/tank" class="small text-secondary">Water Tank</a></small></h2></div>
-        <div class="col-6">
+        <div class="col-6 text-right">
           {% if auto %}
-            <a href="/toggle_auto" class="float-right btn btn-outline-success btn-sm mt-2">Online</a>
+            <a href="/toggle_auto" class="btn btn-outline-success btn-sm mt-2">Online</a>
           {% else %}
-            <a href="/toggle_auto" class="float-right btn btn-outline-danger btn-sm mt-2">Offline</a>
+            <a href="/toggle_auto" class="btn btn-outline-danger btn-sm mt-2">Offline</a>
           {% endif %}
         </div>
     </div>
@@ -94,9 +94,12 @@
     <hr>
     <div class="row pb-2">
       <div class="col-6"><h5>Last 3 runs</h5></div>
-      <div class="col-6">
-        <a href="/healthcheck" class="float-right btn btn-outline-secondary btn-sm">
+      <div class="col-6 text-right">
+        <a href="/healthcheck" class="btn btn-outline-secondary btn-sm">
           <i class="fa fa-heartbeat fa-lg">&nbsp;&nbsp;</i>System Check
+        </a>
+        <a href="/poweroff" class="btn btn-danger btn-sm">
+          Shutdown &nbsp;<i class="fa fa-power-off" aria-hidden="true"></i>
         </a>
       </div>
     </div>

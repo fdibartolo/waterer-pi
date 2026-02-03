@@ -56,6 +56,11 @@ def health_check():
   waterer.toggle_led()
   return redirect('/', code=302)
 
+@app.route('/poweroff')
+def power_off():
+  waterer.power_off()
+  return redirect('/', code=302)
+
 @app.route('/get_datetime')
 def get_datetime():
   return jsonify({'server_datetime' : datetime.datetime.now().strftime('%b %d, %H:%Mhs')})

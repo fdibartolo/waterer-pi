@@ -4,7 +4,7 @@ except ImportError:
   pass
 import time
 import datetime
-from os import environ as env
+from os import environ as env, system
 
 class Waterer:
   BUTTON = 3
@@ -42,6 +42,15 @@ class Waterer:
   def shutdown(self):
     GPIO.cleanup()
     print("WATERER::goodbye!")
+
+  def power_off(self):
+    self.shutdown()
+
+    # power off rpi
+    exit_code = system("sudo systemctl stop waterer.service")
+    if exit_code != 0:
+      print("WATERER::powering off...")
+      system("sudo poweroff")
 
   def is_button_pressed(self):
     return (GPIO.input(Waterer.BUTTON) == 0)
@@ -118,3 +127,7 @@ class WatererLocal:
     
   def shutdown(self):
     print("WATERER::(local) goodbye!")
+
+  def power_off(self):
+    self.shutdown()
+    print("WATERER::(local) powering off...")
