@@ -86,6 +86,7 @@ def toggle_auto():
   else:
     env['AUTO_ENABLED'] = 'True'
     set_auto_water_scheduler()
+  save_config()
   return redirect('/', code=302)
 
 @app.route('/set_areas_time', methods=['POST'])
@@ -94,6 +95,7 @@ def set_areas_time():
   print(f"Area 2 watering time set to {request.form['timeArea2']} seconds")
   env['TIME_AREA_1'] = request.form['timeArea1']
   env['TIME_AREA_2'] = request.form['timeArea2']
+  save_config()
   return redirect('/', code=302)
 
 @app.route('/set_water_schedule', methods=['POST'])
@@ -101,6 +103,7 @@ def set_water_schedule():
   env['HOUR'], env['MINUTE'] = request.form['schedule'].split(':')
   env['DOW'] = ",".join(request.form.getlist('dow'))
   set_auto_water_scheduler()
+  save_config()
   return redirect('/', code=302)
 
 def schedule():
@@ -142,17 +145,20 @@ def is_raspberrypi():
 def is_main_process():
   return not app.debug or env.get("WERKZEUG_RUN_MAIN") == "true"
 
+def save_config():
+  if is_main_process():
+    file_manager.save_config({
+        'auto_enabled': env.get('AUTO_ENABLED'),
+        'scheduled_hour': env.get('HOUR'),
+        'scheduled_minute': env.get('MINUTE'),
+        'scheduled_dow': env.get('DOW'),
+        'time_area_1': env.get('TIME_AREA_1'),
+        'time_area_2': env.get('TIME_AREA_2')
+      })
+  
 # Shut down the scheduler & gpio when exiting the app (only from the main process to avoid multiple registrations in debug mode)
 if is_main_process():
   atexit.register(lambda: scheduler.shutdown())
-  atexit.register(lambda: file_manager.save_config({
-    'auto_enabled': env.get('AUTO_ENABLED'),
-    'scheduled_hour': env.get('HOUR'),
-    'scheduled_minute': env.get('MINUTE'),
-    'scheduled_dow': env.get('DOW'),
-    'time_area_1': env.get('TIME_AREA_1'),
-    'time_area_2': env.get('TIME_AREA_2')
-  }))
   atexit.register(lambda: waterer.shutdown())
 
 if __name__ == '__main__':
