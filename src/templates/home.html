@@ -98,9 +98,6 @@
         <a href="/healthcheck" class="btn btn-outline-secondary btn-sm">
           <i class="fa fa-heartbeat fa-lg">&nbsp;&nbsp;</i>System Check
         </a>
-        <a href="/poweroff" class="btn btn-danger btn-sm">
-          Shutdown &nbsp;<i class="fa fa-power-off" aria-hidden="true"></i>
-        </a>
       </div>
     </div>
     <ul class="small list-group">
@@ -108,6 +105,14 @@
       <li class="list-group-item list-group-item-light">{{ line }}</li>
       {% endfor %}
     </ul>
+    <hr>
+    <div class="row">
+      <div class="col-12 text-right">
+        <a href="/poweroff" class="btn btn-danger btn-sm">
+          Shutdown &nbsp;<i class="fa fa-power-off" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- Modal dialog to update schedule-->
