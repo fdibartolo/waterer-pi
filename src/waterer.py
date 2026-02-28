@@ -90,6 +90,18 @@ class Waterer:
     print("Water IS_WATERING = False")
     print("WATERER::stop watering!")
 
+  def quick_test(self, area, test_time):
+    print(f"WATERER::quick test area {area} during {test_time} seconds")
+    
+    target_area = Waterer.RELE_AREA_1 if area == 1 else Waterer.RELE_AREA_2
+    
+    GPIO.output(Waterer.RELE_MOTOR, GPIO.LOW)
+    now = datetime.datetime.now()
+    GPIO.output(target_area, GPIO.LOW)
+    while ((datetime.datetime.now() - now).seconds < test_time):
+      self.toggle_led()
+    GPIO.output(target_area, GPIO.HIGH)
+
 class WatererLocal:
   def __init__(self, file_manager):
     self.file_manager = file_manager
@@ -122,6 +134,14 @@ class WatererLocal:
     env['IS_WATERING'] = 'False'
     print("\nWATERER::(local) stop watering!")
     
+  def quick_test(self, area, test_time):
+    print(f"WATERER::(local) quick test area {area} during {test_time} seconds")
+    
+    now = datetime.datetime.now()
+    while ((datetime.datetime.now() - now).seconds < test_time):
+      print(".", end="", flush=True)
+      time.sleep(1)
+
   def toggle_led(self):
     print("WATERER::(local) toggle led")
     

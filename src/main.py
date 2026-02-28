@@ -98,6 +98,13 @@ def set_areas_time():
   save_config()
   return redirect('/', code=302)
 
+@app.route('/water_quick_test', methods=['POST'])
+def water_quick_test():
+  area = int(request.form['area'])
+  time = int(request.form['time_for_test'])
+  waterer.quick_test(area, time)
+  return redirect('/', code=302)
+
 @app.route('/set_water_schedule', methods=['POST'])
 def set_water_schedule():
   env['HOUR'], env['MINUTE'] = request.form['schedule'].split(':')
