@@ -101,6 +101,7 @@ class Waterer:
     while ((datetime.datetime.now() - now).seconds < test_time):
       self.toggle_led()
     GPIO.output(target_area, GPIO.HIGH)
+    GPIO.output(Waterer.RELE_MOTOR, GPIO.HIGH)
 
 class WatererLocal:
   def __init__(self, file_manager):
