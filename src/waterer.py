@@ -50,6 +50,7 @@ class Waterer:
     exit_code = system("sudo systemctl stop waterer.service")
     if exit_code == 0:
       print("WATERER::powering off...")
+      time.sleep(2)
       system("sudo /sbin/shutdown -h now")
 
   def is_button_pressed(self):
